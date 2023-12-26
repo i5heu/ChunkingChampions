@@ -2,6 +2,11 @@
 
 # ChunkingChampions
 
+<p align="center">
+  <img src=".media/logo.png"  width="33%">
+</p>
+
+
 ## Overview
 Welcome to `ChunkingChampions` – the definitive benchmarking arena for data chunking algorithms. This repository serves as a competitive platform to identify and compare the most efficient and effective chunking strategies. Our primary goal is to discover the best algorithm capable of creating chunks of approximately 1KB, 100KB, and 100MB, optimized for use in deduplication processes.
 
