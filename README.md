@@ -7,6 +7,34 @@
 </p>
 
 
+## TODO until 1.0.0
+- [ ] benchmarker
+  - [ ] build benchmarker that automatically runs all algorithms against all datasets and creates a report
+    - [ ] should run about 50 times to get a good average
+  - [ ] reports should be showed as a table in the README.md and as a graph
+    - [ ] reports should get information about the algorithm from the info.json
+    - [ ] report info
+      - [ ] distribution of chunk sizes
+      - [ ] average chunk size
+      - [ ] average chunk size deviation
+      - [ ] average time to chunk
+      - [ ] give a score for each dataset and algorithm
+      - [ ] give a overall score for each algorithm
+
+- [ ] Add more datasets file types
+  - [ ] .zip
+  - [ ] .tar
+  - [ ] .mkv
+  - [ ] .ogg
+  - [ ] .mp3
+  - [ ] .webm
+  - [ ] .html
+  - [ ] .pdf
+  - [ ] .go
+  - [ ] .yaml
+  - [ ] .avi
+
+
 ## Overview
 Welcome to `ChunkingChampions` – the definitive benchmarking arena for data chunking algorithms. This repository serves as a competitive platform to identify and compare the most efficient and effective chunking strategies. Our primary goal is to discover the best algorithm capable of creating chunks of approximately 1KB, 100KB, and 100MB, optimized for use in deduplication processes.
 
