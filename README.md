@@ -3,7 +3,7 @@
 # ChunkingChampions
 
 <p align="center">
-  <img src=".media/logo.png"  width="33%">
+  <img src=".media/logo.png"  width="50%">
 </p>
 
 
