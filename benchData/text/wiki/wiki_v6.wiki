@@ -1,0 +1,113 @@
+This file is under the copyright of Wikipedia, which is "Text is available under the Creative Commons Attribution-ShareAlike License 4.0; additional terms may apply."
+Find the License under: https://en.wikipedia.org/wiki/Wikipedia:Text_of_the_Creative_Commons_Attribution-ShareAlike_4.0_International_License
+
+{{short description|Data processing technique to eliminate duplicate copies of repeating data}}
+In [[computing]], '''data deduplication''' is a technique for eliminating duplicate copies of repeating data. Successful implementation of the technique can improve storage utilization, which may in turn lower [[capital expenditure]] by reducing the overall amount of storage media required to meet storage capacity needs. It can also be applied to network data transfers to reduce the number of bytes that must be sent.
+
+The deduplication process requires comparison of data 'chunks' (also known as 'byte patterns') which are unique, contiguous blocks of data. These chunks are identified and stored during a process of analysis, and compared to other chunks within existing data. Whenever a match occurs, the redundant chunk is replaced with a small reference that points to the stored chunk. Given that the same byte pattern may occur dozens, hundreds, or even thousands of times (the match frequency is dependent on the chunk size), the amount of data that must be stored or transferred can be greatly reduced.<ref>{{cite web |title=Understanding Data Deduplication |date=2009-01-09 |website=Druva |language=en-US |url=https://www.druva.com/blog/understanding-data-deduplication/ |access-date=2019-08-06 |url-status=dead |archive-url=https://web.archive.org/web/20190806233329/https://www.druva.com/blog/understanding-data-deduplication/ |archive-date=2019-08-06}}</ref><ref name="snia"/>
+
+A related technique is [[single-instance storage|single-instance (data) storage]], which replaces multiple copies of content at the whole-file level with a single shared copy. While possible to combine this with other forms of data compression and deduplication, it is distinct from newer approaches to data deduplication (which can operate at the segment or sub-block level).
+
+Deduplication is different from data compression algorithms, such as [[LZ77 and LZ78]]. Whereas compression algorithms identify redundant data inside individual files and encodes this redundant data more efficiently, the intent of deduplication is to inspect large volumes of data and identify large sections – such as entire files or large sections of files – that are identical, and replace them with a shared copy.
+
+==Functioning principle==
+For example, a typical email system might contain 100 instances of the same 1 MB ([[megabyte]]) file attachment. Each time the [[email]] platform is backed up, all 100 instances of the attachment are saved, requiring 100 MB storage space. With data deduplication, only one instance of the attachment is actually stored; the subsequent instances are referenced back to the saved copy for deduplication ratio of roughly 100 to 1. Deduplication is often paired with data compression for additional storage saving: Deduplication is first used to eliminate large chunks of repetitive data, and compression is then used to efficiently encode each of the stored chunks.<ref>[https://www.techtarget.com/searchdatabackup/tip/Compression-deduplication-and-encryption-Whats-the-difference Compression, deduplication and encryption: What's the difference?] {{Webarchive|url=https://web.archive.org/web/20181223211506/https://searchdatabackup.techtarget.com/tip/Compression-deduplication-and-encryption-Whats-the-difference |date=2018-12-23}}, Stephen Bigelow and Paul Crocetti</ref>
+
+In [[computer code]], deduplication is done by, for example, storing information in [[variable (computer science)|variables]] so that they don't have to be written out individually but can be changed all at once at a central [[reference (computer science)|referenced]] location. Examples are [[CSS class]]es and [[Help:Footnotes#Footnotes: using a source more than once|named references]] in [[MediaWiki]].
+
+==Benefits==
+Storage-based data deduplication reduces the amount of storage needed for a given set of files. It is most effective in applications where many copies of very similar or even identical data are stored on a single disk. In the case of data backups, which routinely are performed to protect against data loss, most data in a given backup remain unchanged from the previous backup. Common backup systems try to exploit this by omitting (or [[hard link]]ing) files that haven't changed or storing [[data differencing|differences]] between files. Neither approach captures all redundancies, however. Hard-linking does not help with large files that have only changed in small ways, such as an email database; differences only find redundancies in adjacent versions of a single file (consider a section that was deleted and later added in again, or a logo image included in many documents).
+
+In-line network data deduplication is used to reduce the number of bytes that must be transferred between endpoints, which can reduce the amount of bandwidth required. See [[WAN optimization]] for more information.
+
+Virtual servers and virtual desktops benefit from deduplication because it allows nominally separate system files for each virtual machine to be coalesced into a single storage space. At the same time, if a given virtual machine customizes a file, deduplication will not change the files on the other virtual machines—something that alternatives like hard links or shared disks do not offer. Backing up or making duplicate copies of virtual environments is similarly improved.
+
+==Classification==
+
+===Post-process versus in-line deduplication===
+Deduplication may occur "in-line", as data is flowing, or "post-process" after it has been written.
+
+With post-process deduplication, new data is first stored on the storage device and then a process at a later time will analyze the data looking for duplication. The benefit is that there is no need to wait for the [[hash function|hash]] calculations and lookup to be completed before storing the data, thereby ensuring that store performance is not degraded. Implementations offering policy-based operation can give users the ability to defer optimization on "active" files, or to process files based on type and location. One potential drawback is that duplicate data may be unnecessarily stored for a short time, which can be problematic if the system is nearing full capacity.
+
+Alternatively, deduplication hash calculations can be done in-line: synchronized as data enters the target device. If the storage system identifies a block which it has already stored, only a reference to the existing block is stored, rather than the whole new block.
+
+The advantage of in-line deduplication over post-process deduplication is that it requires less storage and network traffic, since duplicate data is never stored or transferred. On the negative side, hash calculations may be computationally expensive, thereby reducing the storage throughput. However, certain vendors with in-line deduplication have demonstrated equipment which performs in-line deduplication at high rates.
+
+Post-process and in-line deduplication methods are often heavily debated.<ref>{{cite web |title=In-line or post-process de-duplication? (updated 6-08) |publisher=Backup Central |url=https://backupcentral.com/inline-or-post-process/ |access-date=2023-12-06 |url-status=live |archive-url=https://web.archive.org/web/20091206035054/http://www.backupcentral.com/content/view/134/47 |archive-date=2009-12-06}}</ref><ref>{{cite web |title=Inline vs. post-processing deduplication appliances |publisher=techtarget.com |url=https://www.techtarget.com/searchstorage/definition/data-deduplication |access-date=2023-12-06 |url-status=live |archive-url=https://web.archive.org/web/20090609122811/http://searchdatabackup.techtarget.com/tip/0,289483,sid187_gci1315295,00.html |archive-date=2009-06-09}}</ref>
+
+===Data formats===
+The [[Storage Networking Industry Association|SNIA Dictionary]] identifies two methods:<ref name="snia">{{cite web |title=SNIA Dictionary » Dictionary D |url=https://www.snia.org/education/online-dictionary/D |access-date=2023-12-06 |url-status=live |archive-url=https://web.archive.org/web/20181224023910/https://www.snia.org/education/dictionary/d |archive-date=2018-12-24}}</ref>
+* content-agnostic data deduplication - a data deduplication method that does not require awareness of specific application data formats.
+* content-aware data deduplication - a data deduplication method that leverages knowledge of specific application data formats.
+
+===Source versus target deduplication===
+Another way to classify data deduplication methods is according to where they occur. Deduplication occurring close to where data is created, is referred to as "source deduplication". When it occurs near where the data is stored, it is called "target deduplication".
+
+Source deduplication ensures that data on the data source is deduplicated. This generally takes place directly within a file system. The file system will periodically scan new files creating hashes and compare them to hashes of existing files.  When files with same hashes are found then the file copy is removed and the new file points to the old file. Unlike [[hard link]]s however, duplicated files are considered to be separate entities and if one of the duplicated files is later modified, then using a system called [[copy-on-write]] a copy of that changed file or block is created. The deduplication process is transparent to the users and backup applications. Backing up a deduplicated file system will often cause duplication to occur resulting in the backups being bigger than the source data.<ref>{{cite web |title=Windows Server 2008: Windows Storage Server 2008 |publisher=Microsoft.com |url=http://www.microsoft.com/windowsserver2008/en/us/WSS08/SIS.aspx |access-date=2009-10-16 |url-status=dead |archive-url=https://web.archive.org/web/20091004073508/http://www.microsoft.com/windowsserver2008/en/us/WSS08/SIS.aspx |archive-date=2009-10-04}}</ref><ref>{{cite web |title=Products - Platform OS |publisher=NetApp |url=http://www.netapp.com/us/products/platform-os/dedupe.html |access-date=2009-10-16 |url-status=dead |archive-url=https://web.archive.org/web/20100206071701/http://www.netapp.com/us/products/platform-os/dedupe.html |archive-date=2010-02-06}}</ref>
+
+{{anchor|reflink}}Source deduplication can be declared explicitly for copying operations, as no calculation is needed to know that the copied data is in need of deduplication. This leads to a new form of "linking" on file systems called the '''reflink''' (Linux) or '''clonefile''' (MacOS), where one or more [[inode]]s (file information entries) are made to share some or all of their data. It is named analogously to [[hard link]]s, which work at the inode level, and [[symbolic link]]s that work at the filename level.<ref>{{cite web |title=The reflink(2) system call v5. |website=lwn.net |url=https://lwn.net/Articles/335380/ |access-date=2019-10-04 |url-status=live |archive-url=https://web.archive.org/web/20151002000848/http://lwn.net/Articles/335380/ |archive-date=2015-10-02}}</ref> The individual entries have a copy-on-write behavior that is non-aliasing, i.e. changing one copy afterwards will not affect other copies.<ref>{{cite web |title=ioctl_ficlonerange(2) |website=Linux Manual Page |url=https://man7.org/linux/man-pages/man2/ioctl_ficlonerange.2.html |access-date=2019-10-04 |url-status=live |archive-url=https://web.archive.org/web/20191007043757/http://man7.org/linux/man-pages/man2/ioctl_ficlonerange.2.html |archive-date=2019-10-07}}</ref> Microsoft's [[ReFS]] also supports this operation.<ref>{{cite web |title=Add clonefile on Windows over ReFS support |website=GitHub |author=Kazuki MATSUDA |url=https://github.com/git-lfs/git-lfs/pull/3790 |access-date=2020-02-23 |url-status=live |archive-url=https://web.archive.org/web/20210113201013/https://github.com/git-lfs/git-lfs/pull/3790 |archive-date=2021-01-13}}</ref>
+
+Target deduplication is the process of removing duplicates when the data was not generated at that location. Example of this would be a server connected to a SAN/NAS, The SAN/NAS would be a target for the server (target deduplication). The server is not aware of any deduplication, the server is also the point of data generation. A second example would be backup. Generally this will be a backup store such as a data repository or a [[virtual tape library]].
+
+===Deduplication methods===
+One of the most common forms of data deduplication implementations works by comparing chunks of data to detect duplicates. For that to happen, each chunk of data is assigned an identification, calculated by the software, typically using cryptographic hash functions. In many implementations, the assumption is made that if the identification is identical, the data is identical, even though this cannot be true in all cases due to the [[pigeonhole principle]]; other implementations do not assume that two blocks of data with the same identifier are identical, but actually verify that data with the same identification is identical.<ref>An example of an implementation that checks for identity rather than assuming it is described in [http://appft1.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-bool.html&r=1&f=G&l=50&co1=AND&d=PG01&s1=shnelvar&OS=shnelvar&RS=shnelvar "US Patent application # 20090307251"] {{Webarchive|url=https://web.archive.org/web/20170115031922/http://appft1.uspto.gov/netacgi/nph-Parser?Sect1=PTO2&Sect2=HITOFF&p=1&u=%2Fnetahtml%2FPTO%2Fsearch-bool.html&r=1&f=G&l=50&co1=AND&d=PG01&s1=shnelvar&OS=shnelvar&RS=shnelvar |date=2017-01-15}}.</ref> If the software either assumes that a given identification already exists in the deduplication namespace or actually verifies the identity of the two blocks of data, depending on the implementation, then it will replace that duplicate chunk with a link.
+
+Once the data has been deduplicated, upon read back of the file, wherever a link is found, the system simply replaces that link with the referenced data chunk. The deduplication process is intended to be transparent to end users and applications.
+
+Commercial deduplication implementations differ by their chunking methods and architectures.
+* Chunking: In some systems, chunks are defined by physical layer constraints (e.g. 4KB block size in [[Write Anywhere File Layout|WAFL]]). In some systems only complete files are compared, which is called [[single-instance storage]] or SIS. The most intelligent (but CPU intensive) method to chunking is generally considered to be sliding-block, also called [[Content-Defined Chunking]]. In sliding block, a window is passed along the file stream to seek out more naturally occurring internal file boundaries.
+* Client backup deduplication: This is the process where the deduplication hash calculations are initially created on the source (client) machines. Files that have identical hashes to files already in the target device are not sent, the target device just creates appropriate internal links to reference the duplicated data. The benefit of this is that it avoids data being unnecessarily sent across the network thereby reducing traffic load.
+* Primary storage and secondary storage: By definition, primary storage systems are designed for optimal performance, rather than lowest possible cost. The design criteria for these systems is to increase performance, at the expense of other considerations. Moreover, primary storage systems are much less tolerant of any operation that can negatively impact performance. Also by definition, secondary storage systems contain primarily duplicate, or secondary copies of data. These copies of data are typically not used for actual production operations and as a result are more tolerant of some performance degradation, in exchange for increased efficiency.
+
+To date, data deduplication has predominantly been used with secondary storage systems. The reasons for this are two-fold: First, data deduplication requires overhead to discover and remove the duplicate data. In primary storage systems, this overhead may impact performance. The second reason why deduplication is applied to secondary data, is that secondary data tends to have more duplicate data. Backup application in particular commonly generate significant portions of duplicate data over time.
+
+Data deduplication has been deployed successfully with primary storage in some cases where the system design does not require significant overhead, or impact performance.
+
+==Single instance storage==
+[[Single-instance storage]] (SIS) is a system's ability to take multiple copies of content objects and replace them by a single shared copy. It is a means to eliminate data duplication and to increase efficiency. SIS is frequently implemented in [[file system]]s, [[email server]] software, [[data]] [[backup]], and other storage-related computer software. Single-instance storage is a simple variant of data deduplication. While data deduplication may work at a segment or sub-block level, single instance storage works at the object level, eliminating redundant copies of objects such as entire files or email messages.<ref>[https://searchitchannel.techtarget.com/tip/Explaining-deduplication-rates-and-single-instance-storage-to-clients Explaining deduplication rates and single-instance storage to clients] {{Webarchive|url=https://web.archive.org/web/20181223211511/https://searchitchannel.techtarget.com/tip/Explaining-deduplication-rates-and-single-instance-storage-to-clients |date=2018-12-23}}. George Crump, Storage Switzerland</ref>
+
+Single-instance storage can be used alongside (or layered upon) other data duplication or data compression methods to improve performance in exchange for an increase in complexity and for (in some cases) a minor increase in storage space requirements.
+
+==Drawbacks and concerns==
+One method for deduplicating data relies on the use of [[cryptographic hash function]]s to identify duplicate segments of data. If two different pieces of information generate the same hash value, this is known as a [[hash collision|collision]]. The probability of a collision depends mainly on the hash length (see [[birthday attack]]). Thus, the concern arises that [[data corruption]] can occur if a [[hash collision]] occurs, and additional means of verification are not used to verify whether there is a difference in data, or not. Both in-line and post-process architectures may offer bit-for-bit validation of original data for guaranteed data integrity. The hash functions used include standards such as [[SHA-1]], [[SHA-256]], and others.
+
+The computational resource intensity of the process can be a drawback of data deduplication. To improve performance, some systems utilize both weak and strong hashes. Weak hashes are much faster to calculate but there is a greater risk of a hash collision. Systems that utilize weak hashes will subsequently calculate a strong hash and will use it as the determining factor to whether it is actually the same data or not. Note that the system overhead associated with calculating and looking up hash values is primarily a function of the deduplication workflow. The reconstitution of files does not require this processing and any incremental performance penalty associated with re-assembly of data chunks is unlikely to impact application performance.
+
+Another concern is the interaction of compression and encryption. The goal of encryption is to eliminate any discernible patterns in the data. Thus encrypted data cannot be deduplicated, even though the underlying data may be redundant.
+
+Although not a shortcoming of data deduplication, there have been data breaches when insufficient security and access validation procedures are used with large repositories of deduplicated data. In some systems, as typical with cloud storage,{{citation needed|date=August 2016}} an attacker can retrieve data owned by others by knowing or guessing the hash value of the desired data.<ref>{{cite journal |title=A Cloud You Can Trust |publisher=[[IEEE]] |journal=[[IEEE Spectrum]] |author1=CHRISTIAN CACHIN |author2=MATTHIAS SCHUNTER |date=December 2011 |url=https://spectrum.ieee.org/a-cloud-you-can-trust |access-date=2011-12-21 |url-status=live |archive-url=https://web.archive.org/web/20120102010532/http://spectrum.ieee.org/computing/networks/a-cloud-you-can-trust |archive-date=2012-01-02}}</ref>
+
+==Implementations==
+Deduplication is implemented in some filesystems such as in [[ZFS]] or [[Write Anywhere File Layout]] and in different [[disk arrays]] models.{{Citation needed|reason=using blog as a reference|date=December 2023}} It is a service available on both [[NTFS]] and [[ReFS]] on Windows servers.
+
+==See also==
+{{Div col|colwidth=20em}}
+* [[Capacity optimization]]
+* [[Cloud storage]]
+* [[Content-addressable storage]]
+* [[Convergent encryption]]
+* [[Delta encoding]]
+* [[Identity resolution]]
+* [[Information integration]]
+* [[Linked data]]
+* [[Pointer (computer programming)]]
+* [[Record linkage]]
+* [[Single-instance storage]]
+{{Div col end}}
+
+==References==
+{{Reflist|30em}}
+
+==External links==
+* Biggar, Heidi(2007.12.11). [https://web.archive.org/web/20080516150913/http://www.infostor.com/webcast/display_webcast.cfm?id=540 WebCast: The Data Deduplication Effect]
+* [https://web.archive.org/web/20110928061457/http://www.tacoma.washington.edu/tech/docs/research/gradresearch/MSpiz.pdf Using Latent Semantic Indexing for Data Deduplication].
+* [https://www.forbes.com/2009/08/08/exagrid-storage-data-technology-cio-network-tape.html A Better Way to Store Data].
+* [https://www.eweek.com/database/what-is-the-difference-between-data-deduplication-file-deduplication-and-data-compression/ What Is the Difference Between Data Deduplication, File Deduplication, and Data Compression?] - Database from eWeek
+* [https://www.snia.org/forums/dmf/programs/data_protect_init/ddsrsig SNIA DDSR SIG]
+** [https://web.archive.org/web/20110409132151/http://www.snia.org/forums/dmf/knowledge/white_papers_and_reports/Understanding_Data_Deduplication_Ratios-20080718.pdf Understanding Data Deduplication Ratios]
+* [https://web.archive.org/web/20100911194757/http://www.itnext.in/content/doing-more-less.html Doing More with Less by Jatinder Singh]
+* [https://www.text-filter.com/tools/remove-duplicate-lines/ DeDuplication] Demo
+{{File systems}}
+
+[[Category:Data compression]]
+[[Category:Data management]]
