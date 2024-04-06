@@ -24,15 +24,10 @@
 - [ ] Add more datasets file types
   - [ ] .zip
   - [ ] .tar
-  - [ ] .mkv
-  - [ ] .ogg
-  - [ ] .mp3
-  - [ ] .webm
   - [ ] .html
   - [ ] .pdf
   - [ ] .go
   - [ ] .yaml
-  - [ ] .avi
 
 
 ## Overview
